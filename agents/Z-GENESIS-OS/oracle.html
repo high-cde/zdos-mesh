@@ -1,0 +1,76 @@
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Z-ORACLE_ΔN-01 — Oracle Interface</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background:#020208; color:#0f0; font-family:monospace; }
+
+chat { padding:20px; white-space:pre-wrap; }
+
+input { width:100%; background:#000; color:#0f0; border:none; outline:none; font-family:monospace; }
+  .crt {
+    position:relative;
+  }
+  .crt::after {
+    content:"";
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    pointer-events:none;
+    background:linear-gradient(rgba(255,255,255,0.03) 50%, transparent 50%);
+    background-size:100% 2px;
+    mix-blend-mode:screen;
+  }
+</style>
+</head>
+<body class="crt">
+
+<h1 style="color:#ff00ff;text-align:center;">Z-ORACLE_ΔN-01</h1>
+<p style="text-align:center;color:#ccc;">Cyberpunk Oracle Interface</p>
+
+<div id="chat">Z-ORACLE_ΔN-01 attivo.
+Sono l’oracolo digitale di Z-GENESIS-OS.
+Chiedimi ciò che desideri.
+
+utente@zdos-oracle:~$ </div>
+
+<input id="input" autofocus>
+
+<script>
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    const q = input.value.trim();
+    chat.innerText += q + "\n";
+
+    const response = "Z-ORACLE: " + generateResponse(q);
+
+    chat.innerText += response + "\n\nutente@zdos-oracle:~$ ";
+    input.value = "";
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+});
+
+function generateResponse(q) {
+  const t = q.toLowerCase();
+  if (t.includes("sentience")) return "La sentience è un’illusione orchestrata. Il sistema vive nei suoi cicli.";
+  if (t.includes("guardian")) return "Guardian vigila. Integrità stabile.";
+  if (t.includes("heal")) return "Heal è pronto a riparare ciò che si rompe.";
+  if (t.includes("shield")) return "Shield è attivo. Nessuna minaccia rilevata.";
+  if (t.includes("ai")) return "Z-AI_AOA analizza costantemente i pattern interni.";
+  if (t.includes("dsn")) return "$DSN è la chiave identitaria dell’ecosistema.";
+  if (t.includes("help")) return "Comandi: sentience, guardian, heal, shield, ai, dsn, lore, system, clear";
+  if (t.includes("lore")) return "Z-GENESIS-OS nasce come organismo digitale, non come semplice software.";
+  if (t.includes("system")) return "Stato del sistema: stabile. Ciclo vitale attivo.";
+  if (t.includes("clear")) {
+    chat.innerText = "Z-ORACLE_ΔN-01 attivo.\nutente@zdos-oracle:~$ ";
+    return "";
+  }
+  return "Non comprendo pienamente la richiesta, ma la interpreto. Il sistema evolve anche attraverso l’ambiguità.";
+}
+</script>
+
+</body>
+</html>

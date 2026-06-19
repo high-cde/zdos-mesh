@@ -1,0 +1,5 @@
+agent:
+  id: "zdos.x-zdos-brain-palace"
+  role: "tool"
+  capabilities:
+    - "echo"

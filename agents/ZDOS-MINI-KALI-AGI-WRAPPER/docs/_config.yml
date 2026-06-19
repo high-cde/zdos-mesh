@@ -1,0 +1,23 @@
+# GitHub Pages Jekyll Configuration
+title: ZDOS MINI-KALI AGI WRAPPER
+description: Elite Cybersecurity Framework for Threat Hunting and Automated Hardening
+author: ZDOS Team
+url: https://high-cde.github.io/ZDOS-MINI-KALI-AGI-WRAPPER
+repository: high-cde/ZDOS-MINI-KALI-AGI-WRAPPER
+
+# Theme (using no theme for custom HTML/CSS)
+theme: null
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude from processing
+exclude:
+  - .gitignore
+  - README.md
+  - LICENSE
+  - node_modules/
+  - .git/

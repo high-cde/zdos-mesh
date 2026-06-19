@@ -1,0 +1,1 @@
+/root/zdos/target/release/node: /root/zdos/node/src/lib.rs /root/zdos/node/src/main.rs /root/zdos/node/src/rpc.rs /root/zdos/node/src/rpc_server.rs /root/zdos/node/src/state.rs /root/zdos/node/src/vm.rs /root/zdos/node/src/zlang_parser.rs /root/zdos/node/src/zlang_tokenizer.rs

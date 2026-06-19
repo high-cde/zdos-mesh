@@ -1,0 +1,5 @@
+name: x-ZDOS Web-OS
+version: 1.0.0
+entry: /public/index.html
+services:
+  - terminal

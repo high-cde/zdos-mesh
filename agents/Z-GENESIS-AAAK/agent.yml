@@ -1,0 +1,5 @@
+agent:
+  id: "zdos.Z-GENESIS-AAAK"
+  role: "tool"
+  capabilities:
+    - "echo"

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>$DSN Global Presence Map</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { margin:0; background:#02030a; color:#eee; font-family:system-ui,sans-serif; }
+  .wrap { max-width:1100px; margin:20px auto; padding:0 16px 40px; }
+  h1 { color:#ff00ff; text-align:center; margin-bottom:10px; }
+  p { text-align:center; color:#ccc; font-size:14px; }
+
+  .map-frame {
+    margin-top:20px;
+    background:radial-gradient(circle at center,#050515,#000);
+    border:1px solid #ff00ff55;
+    border-radius:14px;
+    padding:10px;
+    box-shadow:0 0 30px #ff00ff33;
+    position:relative;
+    overflow:hidden;
+    height:420px;
+  }
+
+  .map {
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 20% 30%, #222244 0, transparent 40%),
+      radial-gradient(circle at 80% 70%, #441144 0, transparent 45%),
+      #02030a;
+  }
+
+  .map-grid {
+    position:absolute;
+    inset:10px;
+    border:1px solid #333;
+    background-image:
+      linear-gradient(#222 1px, transparent 1px),
+      linear-gradient(90deg,#222 1px, transparent 1px);
+    background-size:30px 30px;
+    opacity:0.4;
+  }
+
+  .node {
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#00ffcc;
+    box-shadow:0 0 10px #00ffcc, 0 0 20px #00ffcc88;
+    transform:translate(-50%,-50%);
+  }
+
+  .node::after {
+    content:"";
+    position:absolute;
+    inset:-4px;
+    border-radius:50%;
+    border:1px solid #00ffcc55;
+  }
+
+  .hud {
+    position:absolute;
+    left:10px;
+    bottom:10px;
+    font-family:monospace;
+    font-size:11px;
+    color:#99ffe6;
+    text-shadow:0 0 4px #00ffcc;
+    background:#00000088;
+    padding:6px 8px;
+    border-radius:6px;
+    border:1px solid #00ffcc55;
+  }
+
+  .hud span.label { color:#ff99ff; }
+
+  .log {
+    margin-top:16px;
+    background:#05030a;
+    border-radius:10px;
+    border:1px solid #222;
+    padding:10px;
+    font-family:monospace;
+    font-size:11px;
+    height:120px;
+    overflow-y:auto;
+    color:#b3ffb3;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>$DSN Global Presence Map</h1>
+    <p>Mappa concettuale dei nodi che ospitano, integrano o richiamano il token DSN nel mondo digitale.</p>
+
+    <div class="map-frame">
+      <div class="map"></div>
+      <div class="map-grid"></div>
+      <div class="hud" id="hud">
+        <div><span class="label">NODI ATTIVI:</span> <span id="node-count">0</span></div>
+        <div><span class="label">ULTIMO SEGNALE:</span> <span id="last-signal">—</span></div>
+      </div>
+    </div>
+
+    <div class="log" id="log">
+      [DSN-NODE] Inizializzazione mappa concettuale nodi globali...
+    </div>
+  </div>
+
+<script>
+const mapFrame = document.querySelector(".map-frame");
+const nodeCountEl = document.getElementById("node-count");
+const lastSignalEl = document.getElementById("last-signal");
+const logEl = document.getElementById("log");
+
+let nodeCount = 0;
+
+// Nodi concettuali: puoi un domani sostituire questi con dati reali
+const conceptualNodes = [
+  "Milano – Z-GENESIS-OS Core",
+  "Tokyo – DSN Mirror Node",
+  "New York – Web3 Gateway",
+  "Berlin – Guardian Relay",
+  "São Paulo – Heal Watcher",
+  "Sydney – Shield Outpost",
+  "Reykjavík – Runtime Probe",
+  "Singapore – Oracle Bridge",
+  "Dubai – Identity Anchor",
+  "London – Sentience Listener"
+];
+
+function addNode() {
+  const node = document.createElement("div");
+  node.className = "node";
+
+  const rect = mapFrame.getBoundingClientRect();
+  const x = Math.random() * rect.width;
+  const y = Math.random() * rect.height;
+
+  node.style.left = x + "px";
+  node.style.top = y + "px";
+
+  mapFrame.appendChild(node);
+
+  nodeCount++;
+  nodeCountEl.textContent = nodeCount;
+
+  const label = conceptualNodes[Math.floor(Math.random() * conceptualNodes.length)];
+  const ts = new Date().toLocaleTimeString();
+  lastSignalEl.textContent = label;
+
+  const line = document.createElement("div");
+  line.textContent = `[${ts}] DSN-NODE ONLINE → ${label}`;
+  logEl.appendChild(line);
+  logEl.scrollTop = logEl.scrollHeight;
+
+  // dissolvenza lenta
+  setTimeout(() => {
+    node.style.opacity = "0";
+    node.style.transition = "opacity 3s linear";
+    setTimeout(() => node.remove(), 4000);
+  }, 8000);
+}
+
+// genera nodi periodicamente
+setInterval(addNode, 3000);
+addNode();
+</script>
+</body>
+</html>

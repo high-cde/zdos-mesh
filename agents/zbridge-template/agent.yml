@@ -1,0 +1,5 @@
+agent:
+  id: "zdos.zbridge-template"
+  role: "tool"
+  capabilities:
+    - "echo"

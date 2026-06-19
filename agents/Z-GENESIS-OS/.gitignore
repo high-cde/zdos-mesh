@@ -1,0 +1,4 @@
+core/logs/
+*.tar.gz
+*.bak
+.DS_Store

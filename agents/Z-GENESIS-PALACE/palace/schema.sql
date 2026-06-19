@@ -1,0 +1,5 @@
+CREATE TABLE wings(id INTEGER PRIMARY KEY, name TEXT);
+CREATE TABLE halls(id INTEGER PRIMARY KEY, wing_id INTEGER, name TEXT);
+CREATE TABLE rooms(id INTEGER PRIMARY KEY, hall_id INTEGER, name TEXT);
+CREATE TABLE drawers(id INTEGER PRIMARY KEY, room_id INTEGER, content TEXT, timestamp TEXT);
+CREATE TABLE closets(id INTEGER PRIMARY KEY, room_id INTEGER, zaaak TEXT, timestamp TEXT);

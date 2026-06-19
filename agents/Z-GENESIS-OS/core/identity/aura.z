@@ -1,0 +1,8 @@
+[AURA]
+type = quantum-signature
+version = 1.0
+intensity = 1.00
+color-field = #00F0FF
+pattern = "entanglement-wave"
+affects = ["identity", "runtime", "ui.theme", "agents.personality", "guardian", "heal", "shield"]
+mode = "total-fusion"

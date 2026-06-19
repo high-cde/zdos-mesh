@@ -1,0 +1,26 @@
+Z-GENESIS-OS STRUCTURAL MANIFEST
+Generated: Sun Feb  8 02:07:46 CET 2026
+
+CORE MODULES:
+  - core/VERSION
+  - core/utils.sh
+  - core/dragon-status.sh
+
+ZSHELL MODULES:
+  - zshell/gt-zshell
+  - zshell/gt-z-config
+  - zshell/zones/*
+  - zshell/rituals/*
+
+ICP MODULES:
+  - icp/config/icp-endpoints.conf
+  - icp/scripts/*
+
+DOCS:
+  - docs/ (empty, ready for expansion)
+
+ANCHORS:
+  - core/ANCHOR
+  - zshell/ANCHOR
+  - icp/ANCHOR
+  - docs/ANCHOR

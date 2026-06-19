@@ -1,0 +1,5 @@
+agent:
+  id: "zdos.xCLOUD-by-zdos"
+  role: "tool"
+  capabilities:
+    - "echo"

@@ -1,0 +1,15 @@
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+.DS_Store
+*.log
+data/
+dist/
+.env
+.env.local
+*.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

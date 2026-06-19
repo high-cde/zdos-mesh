@@ -1,0 +1,5 @@
+agent:
+  id: "zdos.high-cde"
+  role: "tool"
+  capabilities:
+    - "echo"

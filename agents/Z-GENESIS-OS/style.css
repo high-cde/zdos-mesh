@@ -1,0 +1,105 @@
+body {
+  margin:0;
+  background:#050509;
+  color:#eee;
+  font-family:system-ui, sans-serif;
+}
+
+.hero {
+  text-align:center;
+  padding:40px 20px;
+  background:linear-gradient(135deg,#1a001a,#000);
+  color:#ff00ff;
+}
+
+.logo { font-size:10px; color:#ff00ff; }
+
+.subtitle { color:#ccc; margin-top:-10px; }
+
+.actions { margin-top:20px; }
+
+.btn {
+  padding:10px 20px;
+  border-radius:6px;
+  border:1px solid #444;
+  margin:5px;
+  color:#fff;
+  text-decoration:none;
+  font-family:monospace;
+}
+
+.primary { background:#ff00ff; }
+.accent { background:#6600ff; }
+
+.content {
+  max-width:900px;
+  margin:40px auto;
+  padding:20px;
+  background:#0a0a12;
+  border:1px solid #222;
+  border-radius:10px;
+}
+
+footer {
+  text-align:center;
+  padding:20px;
+  color:#666;
+}
+
+/ ORACLE CARD /
+.oracle-card {
+  background:#0a0a12;
+  border:1px solid #333;
+  border-radius:10px;
+  padding:20px;
+  margin-top:15px;
+  box-shadow:0 0 18px #ff00ff22;
+}
+
+/ NEON ORACLE BUTTON /
+.btn-oracle {
+  display:inline-block;
+  padding:14px 28px;
+  margin-top:15px;
+  font-family:monospace;
+  font-size:16px;
+  color:#ffffff;
+  background:linear-gradient(135deg,#ff00ff,#6600ff);
+  border:2px solid #ff00ff;
+  border-radius:10px;
+  text-decoration:none;
+  box-shadow:0 0 12px #ff00ff88, 0 0 24px #6600ff55;
+  transition:0.25s ease-in-out;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.btn-oracle:hover {
+  background:linear-gradient(135deg,#ff33ff,#9900ff);
+  box-shadow:0 0 20px #ff00ffcc, 0 0 40px #9900ffaa;
+  transform:scale(1.07);
+}
+
+.btn-oracle:active {
+  transform:scale(0.96);
+  box-shadow:0 0 10px #ff00ffaa;
+}
+
+.hacker-anim {
+  margin-top: 20px;
+  background: #000;
+  border: 1px solid #ff00ff55;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #ff00ff33;
+  height: 180px;
+  overflow: hidden;
+}
+
+#hack-stream {
+  color: #ff00ff;
+  font-family: monospace;
+  font-size: 12px;
+  line-height: 1.1;
+  text-shadow: 0 0 5px #ff00ff;
+}

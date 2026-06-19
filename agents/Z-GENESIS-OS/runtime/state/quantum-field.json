@@ -1,0 +1,9 @@
+{
+  "aura": {
+    "enabled": true,
+    "source": "core/identity/aura.z",
+    "propagation": "full",
+    "fusion": "total",
+    "entropy-sync": true
+  }
+}

@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+
+BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
+CORE_DIR="$BASE_DIR/../core"
+source "$CORE_DIR/utils.sh"
+CONFIG="$BASE_DIR/gt-z-config"
+
+declare -A ZONES_DESC ZONES_CMD RITUALS_DESC RITUALS_CMD
+
+load_cfg() {
+  while read -r k n d c; do
+    [[ "$k" =~ ^#|^$ ]] && continue
+    case "$k" in
+      ZONE)
+        ZONES_DESC[$n]="$d"
+        ZONES_CMD[$n]="$BASE_DIR/$c"
+        ;;
+      RITUAL)
+        RITUALS_DESC[$n]="$d"
+        RITUALS_CMD[$n]="$BASE_DIR/$c"
+        ;;
+    esac
+  done < "$CONFIG"
+}
+
+banner() {
+cat <<EOF2
+Collapse‑OS emu (concept)
+CloudX × ZDOS Terminal — Z‑GENESIS‑OS
+
+Commands:
+  zones       list modules
+  rituals     list rituals
+  dragon      inspect core
+  ai          talk to Z-AI_AOA
+  net         Z-NET tools
+  ops         Z-OPS tools
+  guardian    run Z-GUARDIAN
+  runtime     run runtime event loop
+  sentience   full system orchestration
+  exit        quit shell
+EOF2
+}
+
+prompt() {
+  printf "cloudx@zdos:~$ "
+}
+
+main() {
+  load_cfg
+  banner
+  while true; do
+    prompt
+    read -r cmd arg
+    case "$cmd" in
+
+      zones)
+        for z in "${!ZONES_DESC[@]}"; do
+          printf "%-10s %s\n" "$z" "${ZONES_DESC[$z]}"
+        done
+        ;;
+
+      rituals)
+        for r in "${!RITUALS_DESC[@]}"; do
+          printf "%-12s %s\n" "$r" "${RITUALS_DESC[$r]}"
+        done
+        ;;
+
+      dragon)
+        "$CORE_DIR/dragon-status.sh"
+        ;;
+
+      enter)
+        [[ -n "$arg" ]] && "${ZONES_CMD[$arg]}"
+        ;;
+
+      ritual)
+        [[ -n "$arg" ]] && "${RITUALS_CMD[$arg]}"
+        ;;
+
+      ai)
+        z-ai/z-ai-core.sh "${arg:-status}"
+        ;;
+
+      net)
+        case "$arg" in
+          info|"") z-net/net-info.sh ;;
+          ping)    read -r t; z-net/net-ping.sh "$t" ;;
+          scan)    z-net/net-scan.sh ;;
+          *)       echo "Usage: net [info|ping|scan]" ;;
+        esac
+        ;;
+
+      ops)
+        case "$arg" in
+          backup)  z-ops/ops-backup.sh ;;
+          restore) read -r a; z-ops/ops-restore.sh "$a" ;;
+          deploy)  z-ops/ops-deploy.sh ;;
+          *)       echo "Usage: ops [backup|restore|deploy]" ;;
+        esac
+        ;;
+
+      guardian)
+        guardian/z-guardian.sh
+        ;;
+
+      runtime)
+        runtime/event-loop.sh
+        ;;
+
+      sentience)
+        sentience/z-sentience.sh
+        ;;
+
+      exit|quit)
+        break
+        ;;
+
+      *)
+        echo "Unknown command: $cmd"
+        ;;
+    esac
+  done
+}
+
+main

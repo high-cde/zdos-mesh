@@ -1,0 +1,215 @@
+#!/usr/bin/env node
+
+const { exec } = require("child_process");
+const path = require("path");
+
+const API_BASE_URL = "http://localhost:3000"; // Assumi che l'API sia in esecuzione localmente
+
+async function callApi(endpoint, data) {
+    return new Promise((resolve, reject) => {
+        const curlCommand = `curl -s -X POST -H "Content-Type: application/json" -d '${JSON.stringify(data)}' ${API_BASE_URL}${endpoint}`;
+        exec(curlCommand, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Error calling API ${endpoint}: ${error.message}`);
+                return reject(error);
+            }
+            if (stderr) {
+                console.error(`API call stderr for ${endpoint}: ${stderr}`);
+            }
+            try {
+                resolve(JSON.parse(stdout));
+            } catch (parseError) {
+                console.error(`Error parsing API response for ${endpoint}: ${parseError.message}`);
+                reject(parseError);
+            }
+        });
+    });
+}
+
+async function main() {
+    const args = process.argv.slice(2);
+    const command = args[0];
+    const subcommand = args[1];
+    const value = args[2];
+
+    switch (command) {
+        case "scan":
+            if (subcommand === "basic" && value) {
+                console.log(`Running basic scan for ${value}...`);
+                const result = await callApi("/scan/basic", { target: value });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "advanced" && value) {
+                console.log(`Running advanced recon for ${value}...`);
+                const result = await callApi("/recon/advanced", { target: value, scanType: "-sV" }); // Default to service version scan
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "banner" && args[2] && args[3]) {
+                console.log(`Grabbing banner for ${args[2]}:${args[3]}...`);
+                const result = await callApi("/recon/banner", { target: args[2], port: parseInt(args[3]) });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "ssl" && args[2]) {
+                console.log(`Auditing SSL for ${args[2]}...`);
+                const result = await callApi("/recon/ssl", { target: args[2] });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "attack-surface" && value) {
+                console.log(`Mapping attack surface for ${value}...`);
+                const result = await callApi("/recon/attack-surface", { domain: value });
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini scan basic <target> | advanced <target> | banner <target> <port> | ssl <target> | attack-surface <domain>");
+            }
+            break;
+        case "osint":
+            if (subcommand === "full" && value) {
+                console.log(`Running full OSINT for ${value}...`);
+                const result = await callApi("/osint/full", { domain: value });
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini osint full <domain>");
+            }
+            break;
+        case "mail-audit":
+            if (value) {
+                const emailContent = require("fs").readFileSync(value, "utf8");
+                console.log(`Auditing email from ${value}...`);
+                const result = await callApi("/mail/audit", { emailContent });
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini mail-audit <email-file>");
+            }
+            break;
+        case "cookie-audit":
+            if (value) {
+                const cookieJson = require("fs").readFileSync(value, "utf8");
+                console.log(`Auditing cookie from ${value}...`);
+                const result = await callApi("/cookie/audit", { cookieJson });
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini cookie-audit <cookie-json-file>");
+            }
+            break;
+        case "se-check":
+            if (value) {
+                const textContent = require("fs").readFileSync(value, "utf8");
+                console.log(`Checking social engineering patterns in ${value}...`);
+                const result = await callApi("/se/check", { textContent });
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini se-check <text-file>");
+            }
+            break;
+        case "sniffer":
+            if (subcommand === "capture" && args[2]) {
+                const interfaceName = args[2];
+                const duration = args[3] ? parseInt(args[3]) : 10;
+                const filter = args[4] || "";
+                console.log(`Capturing traffic on ${interfaceName} for ${duration}s with filter '${filter}'...`);
+                const result = await callApi("/sniffer/capture", { interfaceName, durationSeconds: duration, filter });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "analyze-pcap" && args[2]) {
+                const pcapFile = args[2];
+                const displayFilter = args[3] || "";
+                console.log(`Analyzing PCAP file ${pcapFile} with display filter '${displayFilter}'...`);
+                const result = await callApi("/sniffer/analyze-pcap", { pcapFile, displayFilter });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "arp-monitor" && args[2]) {
+                const interfaceName = args[2];
+                const duration = args[3] ? parseInt(args[3]) : 10;
+                console.log(`Monitoring ARP on ${interfaceName} for ${duration}s...`);
+                const result = await callApi("/sniffer/arp-monitor", { interfaceName, durationSeconds: duration });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "analyze-arp-pcap" && args[2]) {
+                const pcapFile = args[2];
+                console.log(`Analyzing ARP PCAP file ${pcapFile}...`);
+                const result = await callApi("/sniffer/analyze-arp-pcap", { pcapFile });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "dns-monitor" && args[2]) {
+                const interfaceName = args[2];
+                const duration = args[3] ? parseInt(args[3]) : 10;
+                console.log(`Monitoring DNS on ${interfaceName} for ${duration}s...`);
+                const result = await callApi("/sniffer/dns-monitor", { interfaceName, durationSeconds: duration });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "analyze-dns-pcap" && args[2]) {
+                const pcapFile = args[2];
+                console.log(`Analyzing DNS PCAP file ${pcapFile}...`);
+                const result = await callApi("/sniffer/analyze-dns-pcap", { pcapFile });
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini sniffer capture <interface> [duration] [filter] | analyze-pcap <pcap-file> [display-filter] | arp-monitor <interface> [duration] | analyze-arp-pcap <pcap-file> | dns-monitor <interface> [duration] | analyze-dns-pcap <pcap-file>");
+            }
+            break;
+        case "remediation":
+            if (subcommand === "generate" && value) {
+                const vulnerabilityReport = require("fs").readFileSync(value, "utf8");
+                console.log(`Generating remediation script from ${value}...`);
+                const result = await callApi("/remediation/generate", { vulnerabilityReport: JSON.parse(vulnerabilityReport) });
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini remediation generate <vulnerability-report-file>");
+            }
+            break;
+        case "report":
+            if (subcommand === "generate" && args[2]) {
+                const reportId = args[2];
+                const format = args[3] || "markdown";
+                console.log(`Generating ${format} report for ID ${reportId}...`);
+                const result = await callApi("/report/generate", { reportId, format });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (value) {
+                console.log(`Retrieving report for ID ${value}...`);
+                // This would be a GET request, so we\'ll simulate it for now
+                console.log(`GET ${API_BASE_URL}/report/${value} (Not yet implemented on API side)`);
+            } else {
+                console.log("Usage: zdos-mini report generate <report-id> [format] | report <id>");
+            }
+            break;
+        case "monitor":
+            if (subcommand === "start" && value) {
+                const interval = args[3] ? parseInt(args[3]) : undefined;
+                console.log(`Starting autonomous monitoring for ${value} with interval ${interval || 'default'}...`);
+                const result = await callApi("/monitor/start", { target: value, interval });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "stop") {
+                console.log("Stopping autonomous monitoring...");
+                const result = await callApi("/monitor/stop");
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "status") {
+                console.log("Checking autonomous monitoring status...");
+                const result = await callApi("/monitor/status");
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini monitor start <target> [interval_ms] | stop | status");
+            }
+            break;
+        case "fuzz":
+            if (subcommand === "ffuf" && value) {
+                const url = value;
+                const wordlistPath = args[3] || "/usr/share/wordlists/dirbuster/directory-list-2.3-small.txt";
+                const extensions = args[4] || "html,php,asp,aspx,jsp,txt,json,xml";
+                console.log(`Starting FFUF fuzzing on ${url}...`);
+                const result = await callApi("/fuzzing/ffuf", { url, wordlistPath, extensions });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "gobuster-dir" && value) {
+                const url = value;
+                const wordlistPath = args[3] || "/usr/share/wordlists/dirbuster/directory-list-2.3-small.txt";
+                const extensions = args[4] || "html,php,txt";
+                console.log(`Starting Gobuster directory enumeration on ${url}...`);
+                const result = await callApi("/fuzzing/gobuster-dir", { url, wordlistPath, extensions });
+                console.log(JSON.stringify(result, null, 2));
+            } else if (subcommand === "gobuster-vhost" && value) {
+                const domain = value;
+                const wordlistPath = args[3] || "/usr/share/wordlists/dirbuster/VHOSTS.txt";
+                console.log(`Starting Gobuster VHost enumeration on ${domain}...`);
+                const result = await callApi("/fuzzing/gobuster-vhost", { domain, wordlistPath });
+                console.log(JSON.stringify(result, null, 2));
+            } else {
+                console.log("Usage: zdos-mini fuzz ffuf <url> [wordlist] [extensions] | gobuster-dir <url> [wordlist] [extensions] | gobuster-vhost <domain> [wordlist]");
+            }
+            break;
+        default:
+            console.log("Usage: zdos-mini <command> [subcommand] [value]");
+            console.log("Commands: scan, osint, mail-audit, cookie-audit, se-check, sniffer, report");
+            break;
+    }
+}
+
+main();

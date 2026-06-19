@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>DSN NETWORK LIVE — Z‑GENESIS‑OS</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+  body {
+    margin:0;
+    background:#050509;
+    color:#eee;
+    font-family:system-ui, sans-serif;
+  }
+
+  h1 {
+    text-align:center;
+    color:#ff00ff;
+    margin-top:20px;
+    text-shadow:0 0 12px #ff00ff;
+  }
+
+  h2 {
+    color:#ff66ff;
+    margin-top:30px;
+    text-shadow:0 0 8px #ff33ff;
+  }
+
+  .wrap {
+    max-width:1200px;
+    margin:0 auto;
+    padding:20px;
+  }
+
+  /* MAPPA DSN */
+  .map-frame {
+    margin-top:20px;
+    background:radial-gradient(circle at center,#080818,#000);
+    border:1px solid #ff00ff55;
+    border-radius:14px;
+    padding:10px;
+    box-shadow:0 0 30px #ff00ff33;
+    position:relative;
+    overflow:hidden;
+    height:420px;
+  }
+
+  .map {
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 20% 30%, #222244 0, transparent 40%),
+      radial-gradient(circle at 80% 70%, #441144 0, transparent 45%),
+      #02030a;
+  }
+
+  .map-grid {
+    position:absolute;
+    inset:10px;
+    border:1px solid #333;
+    background-image:
+      linear-gradient(#222 1px, transparent 1px),
+      linear-gradient(90deg,#222 1px, transparent 1px);
+    background-size:30px 30px;
+    opacity:0.4;
+  }
+
+  .node {
+    position:absolute;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#00ffcc;
+    box-shadow:0 0 12px #00ffcc, 0 0 22px #00ffcc88;
+    transform:translate(-50%,-50%);
+  }
+
+  .node.stellar {
+    background:#ff00ff;
+    box-shadow:0 0 18px #ff00ff, 0 0 30px #ff00ffaa;
+  }
+
+  .hud {
+    position:absolute;
+    left:10px;
+    bottom:10px;
+    font-family:monospace;
+    font-size:11px;
+    color:#99ffe6;
+    text-shadow:0 0 4px #00ffcc;
+    background:#00000088;
+    padding:6px 8px;
+    border-radius:6px;
+    border:1px solid #00ffcc55;
+  }
+
+  /* LOG */
+  .log {
+    margin-top:16px;
+    background:#05030a;
+    border-radius:10px;
+    border:1px solid #222;
+    padding:10px;
+    font-family:monospace;
+    font-size:11px;
+    height:160px;
+    overflow-y:auto;
+    color:#b3ffb3;
+  }
+
+  /* PANNELLI */
+  .panel {
+    background:#0a0a12;
+    border:1px solid #222;
+    border-radius:12px;
+    padding:16px;
+    margin-top:20px;
+    box-shadow:0 0 18px #000;
+  }
+
+  .panel strong {
+    color:#ff99ff;
+  }
+
+  .life {
+    font-family:monospace;
+    font-size:13px;
+    color:#ff66ff;
+    text-shadow:0 0 6px #ff00ff;
+  }
+
+  .pulse {
+    font-family:monospace;
+    font-size:14px;
+    color:#00ffcc;
+    text-shadow:0 0 6px #00ffcc;
+  }
+
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<h1>DSN NETWORK LIVE</h1>
+<p style="text-align:center;color:#ccc;">Rete concettuale del token DSN — nodi, heartbeat, entropia, mining e presenza globale.</p>
+
+<!-- MAPPA -->
+<div class="map-frame">
+  <div class="map"></div>
+  <div class="map-grid"></div>
+
+  <div class="hud" id="hud">
+    <div><strong>NODI ATTIVI:</strong> <span id="node-count">0</span></div>
+    <div><strong>HEARTBEAT:</strong> <span id="hb">—</span></div>
+    <div><strong>ENTROPIA:</strong> <span id="entropy">0.00</span></div>
+    <div><strong>ULTIMO NODO:</strong> <span id="last-node">—</span></div>
+  </div>
+</div>
+
+<div class="log" id="log">
+  [DSN-NODE] Avvio rete concettuale...
+</div>
+
+<!-- PANNELLO HEARTBEAT -->
+<div class="panel">
+  <h2>DSN Heartbeat</h2>
+  <p class="pulse" id="pulse">In attesa del primo battito...</p>
+</div>
+
+<!-- PANNELLO MINING -->
+<div class="panel">
+  <h2>DSN Presence Mining</h2>
+  <p class="life">Pulse generati: <strong id="pulse-count">0</strong></p>
+  <p class="life">Modalità: <strong id="mode">normal</strong></p>
+</div>
+
+<!-- PANNELLO NODI -->
+<div class="panel">
+  <h2>DSN Node List</h2>
+  <div id="node-list" style="font-family:monospace;font-size:12px;color:#ccc;"></div>
+</div>
+
+</div>
+
+<script>
+/* ===========================
+   DSN NETWORK LIVE ENGINE
+   =========================== */
+
+const mapFrame = document.querySelector(".map-frame");
+const logEl = document.getElementById("log");
+const nodeCountEl = document.getElementById("node-count");
+const hbEl = document.getElementById("hb");
+const entropyEl = document.getElementById("entropy");
+const lastNodeEl = document.getElementById("last-node");
+const pulseEl = document.getElementById("pulse");
+const pulseCountEl = document.getElementById("pulse-count");
+const modeEl = document.getElementById("mode");
+const nodeListEl = document.getElementById("node-list");
+
+let nodeCount = 0;
+let pulseCount = 0;
+let entropy = 0.50;
+
+/* NODI CONCETTUALI */
+const nodes = [
+  { city:"Milano", role:"Anchor", lat:45.46, lon:9.19 },
+  { city:"Tokyo", role:"Mirror", lat:35.68, lon:139.69 },
+  { city:"New York", role:"Relay", lat:40.71, lon:-74.00 },
+  { city:"Berlin", role:"Guardian Probe", lat:52.52, lon:13.40 },
+  { city:"Sydney", role:"Shield Outpost", lat:-33.86, lon:151.20 },
+  { city:"Reykjavík", role:"Runtime Pulse", lat:64.14, lon:-21.94 },
+  { city:"Singapore", role:"Oracle Bridge", lat:1.35, lon:103.82 },
+  { city:"Dubai", role:"Identity Anchor", lat:25.20, lon:55.27 }
+];
+
+/* AGGIUNTA NODO */
+function addNode() {
+  const n = nodes[Math.floor(Math.random() * nodes.length)];
+
+  const node = document.createElement("div");
+  node.className = "node";
+
+  const rect = mapFrame.getBoundingClientRect();
+  node.style.left = Math.random() * rect.width + "px";
+  node.style.top = Math.random() * rect.height + "px";
+
+  mapFrame.appendChild(node);
+
+  nodeCount++;
+  nodeCountEl.textContent = nodeCount;
+
+  entropy = Math.min(1, entropy + 0.02);
+  entropyEl.textContent = entropy.toFixed(2);
+
+  lastNodeEl.textContent = `${n.city} (${n.role})`;
+
+  const ts = new Date().toLocaleTimeString();
+  const line = document.createElement("div");
+  line.textContent = `[${ts}] Nodo attivo → ${n.city} (${n.role})`;
+  logEl.appendChild(line);
+  logEl.scrollTop = logEl.scrollHeight;
+
+  pulse();
+}
+
+/* HEARTBEAT */
+function heartbeat() {
+  hbEl.textContent = "alive";
+  pulseEl.textContent = "DSN-PULSE";
+  pulse();
+}
+
+/* MINING */
+function pulse() {
+  pulseCount++;
+  pulseCountEl.textContent = pulseCount;
+
+  if (entropy > 0.8) {
+    modeEl.textContent = "stellar-sync";
+  }
+}
+
+/* LISTA NODI */
+function updateNodeList() {
+  nodeListEl.innerHTML = nodes
+    .map(n => `• ${n.city} — ${n.role}`)
+    .join("<br>");
+}
+
+/* LOOP */
+setInterval(addNode, 3500);
+setInterval(heartbeat, 5000);
+
+updateNodeList();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+fn rpc_call(method, params) {
+    let url = "http://127.0.0.1:8545";
+    let body = {
+        "jsonrpc": "2.0",
+        "method": method,
+        "params": params,
+        "id": 1
+    };
+
+    return http.post(url, body);
+}
+
+fn call_contract(name, func, args) {
+    return rpc_call("vm_call", {
+        "contract": name,
+        "function": func,
+        "args": args
+    });
+}
+
+fn deploy_contract(name, code) {
+    return rpc_call("vm_deploy", {
+        "contract": name,
+        "code": code
+    });
+}

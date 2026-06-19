@@ -1,0 +1,39 @@
+name: ZDOS ULTRA AUTOBUILD
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  autobuild:
+    runs-on: ubuntu-latest
+
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Sync submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive
+
+      - name: Validate structure
+        run: |
+          echo "Repository OK"
+          ls -la
+
+      - name: Build static site
+        run: |
+          echo "No npm build required. Static site ready."
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zdos-web
+          path: .

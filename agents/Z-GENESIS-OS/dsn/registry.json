@@ -1,0 +1,10 @@
+{
+  "nodes": [
+    {
+      "id": "local-core",
+      "type": "core",
+      "url": "http://127.0.0.1:3000"
+    }
+  ],
+  "services": []
+}

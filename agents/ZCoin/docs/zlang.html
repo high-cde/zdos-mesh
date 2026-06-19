@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Z‑Lang Terminal • ZDOS% + HighCoin RPC</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .terminal {
+      background:#000000cc;
+      border:1px solid #202234;
+      border-radius:10px;
+      padding:20px;
+      height:420px;
+      overflow-y:auto;
+      font-family:'Roboto Mono',monospace;
+      font-size:.9rem;
+      color:#00eaff;
+      box-shadow:0 0 20px #00eaff33;
+    }
+    .term-input {
+      width:100%;
+      background:transparent;
+      border:none;
+      outline:none;
+      color:#00ffc3;
+      font-family:'Roboto Mono',monospace;
+      font-size:.9rem;
+      margin-top:10px;
+    }
+    .prompt { color:#00ffc3; }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html">Hub</a>
+  <a href="wallet.html">Wallet</a>
+  <a href="explorer.html">Explorer</a>
+  <a href="miner.html">Miner</a>
+  <a href="zlang.html">Z‑Lang</a>
+  <a href="roadmap.html">Roadmap</a>
+  <a href="nodes.html">Nodes</a>
+</nav>
+
+<section class="section">
+  <h2>Z‑Lang Terminal • ZDOS% • HighCoin RPC</h2>
+  <div class="card">
+    <p>Terminale ZDOS% con comandi Z‑Lang mock e accesso diretto al nodo HighCoin client-side.</p>
+    <div id="terminal" class="terminal"></div>
+    <div style="margin-top:10px;">
+      <span class="prompt">zdos%</span>
+      <input id="termInput" class="term-input" autofocus autocomplete="off">
+    </div>
+  </div>
+</section>
+
+<footer>
+  ZDOS • Z‑Lang + HighCoin RPC — high‑cde
+</footer>
+
+<script src="assets/js/highcoin-node.js"></script>
+<script src="assets/js/highcoin-runtime.js"></script>
+<script>
+(function(){
+  const term  = document.getElementById('terminal');
+  const input = document.getElementById('termInput');
+
+  function print(text, color="#00eaff") {
+    String(text).split("\\n").forEach(t => {
+      const line = document.createElement('div');
+      line.style.color = color;
+      line.textContent = t;
+      term.appendChild(line);
+    });
+    term.scrollTop = term.scrollHeight;
+  }
+
+  async function exec(cmd) {
+    const parts = cmd.trim().split(" ");
+    const base  = parts[0];
+
+    switch(base) {
+      case "help":
+        print("Comandi disponibili:");
+        print("  help                 - mostra i comandi");
+        print("  clear                - pulisce il terminale");
+        print("  echo [txt]           - stampa testo");
+        print("  hc.height            - altezza chain HighCoin");
+        print("  hc.latest            - ultimo blocco");
+        print("  hc.balance [addr]    - balance address");
+        print("  hc.mine [addr]       - mina un blocco per addr");
+        break;
+
+      case "clear":
+        term.innerHTML = "";
+        break;
+
+      case "echo":
+        print(parts.slice(1).join(" "));
+        break;
+
+      case "hc.height":
+        print("Altezza chain: " + await HighCoinRPC.call("hc_getHeight"), "#00ffc3");
+        break;
+
+      case "hc.latest":
+        const b = await HighCoinRPC.call("hc_getLatestBlock");
+        print(JSON.stringify(b, null, 2), "#00ffc3");
+        break;
+
+      case "hc.balance":
+        const addr = parts[1] || "miner-local";
+        const bal = await HighCoinRPC.call("hc_getBalance", [addr]);
+        print(`Balance ${addr}: ${bal}`, "#00ffc3");
+        break;
+
+      case "hc.mine":
+        const miner = parts[1] || "miner-local";
+        print("Mining block per " + miner + "...", "#9a9ab0");
+        const nb = await HighCoinRPC.call("hc_mineBlock", [miner, 3]);
+        print("Blocco minato: #" + nb.index + " hash=" + nb.hash, "#00ffc3");
+        break;
+
+      default:
+        print("Comando non riconosciuto: " + base, "#ff4b81");
+    }
+  }
+
+  input.addEventListener("keydown", async (e)=>{
+    if (e.key === "Enter") {
+      const cmd = input.value.trim();
+      if (!cmd) return;
+      print("zdos% " + cmd, "#00ffc3");
+      await exec(cmd);
+      input.value = "";
+    }
+  });
+
+  print("ZDOS% Terminal collegato al nodo HighCoin client-side.");
+  print("Digita 'help' per i comandi.");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+case "$1" in
+  --reload)
+    echo "[Z-GENESIS-OS] Reloading identity modules..."
+    sleep 0.5
+    echo "[OK] Identity reloaded."
+    ;;
+
+  --sync)
+    echo "[Z-GENESIS-OS] Syncing quantum-field..."
+    sleep 0.5
+    echo "[OK] Quantum-field synchronized."
+    ;;
+
+  --ignite)
+    echo "[Z-GENESIS-OS] Igniting AURA-Z quantum field..."
+    sleep 1
+    echo "[AURA-Z] Field activated. Propagation: TOTAL."
+    ;;
+    
+  *)
+    echo "Usage: ./z-run [--reload | --sync | --ignite]"
+    ;;
+esac

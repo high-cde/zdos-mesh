@@ -1,0 +1,14 @@
+[package]
+name = "zdos-zlang"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[[bin]]
+name = "zlang"
+path = "cli/main.rs"
+
+[lib]
+name = "zlang_core"
+path = "lib.rs"

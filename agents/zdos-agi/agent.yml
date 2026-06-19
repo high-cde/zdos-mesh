@@ -1,0 +1,5 @@
+agent:
+  id: "zdos.zdos-agi"
+  role: "tool"
+  capabilities:
+    - "echo"

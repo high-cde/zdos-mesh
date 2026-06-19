@@ -1,0 +1,5 @@
+agent:
+  id: "zdos.System.zdos.znode"
+  role: "tool"
+  capabilities:
+    - "echo"

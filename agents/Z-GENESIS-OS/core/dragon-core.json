@@ -1,0 +1,7 @@
+{
+  "identity": "Z-GENESIS-OS",
+  "aspect": "Dragon Core",
+  "vigilance": "active",
+  "entropy": "stable",
+  "version_source": "core/VERSION"
+}

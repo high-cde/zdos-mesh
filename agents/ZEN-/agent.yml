@@ -1,0 +1,5 @@
+agent:
+  id: "zdos.ZEN-"
+  role: "tool"
+  capabilities:
+    - "echo"

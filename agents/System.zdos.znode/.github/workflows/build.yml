@@ -1,0 +1,39 @@
+name: Z-NODE DevShell Build
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 21
+
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Accept Android SDK licenses
+      run: yes | sdkmanager --licenses
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build DevShell APK
+      run: ./gradlew :znode-app:assembleDebug --stacktrace
+
+    - name: Upload DevShell APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: DevShell-APK
+        path: znode-app/build/outputs/**/*.apk

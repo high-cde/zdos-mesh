@@ -1,0 +1,31 @@
+{
+  "modules": [
+    {
+      "id": "xCITY",
+      "name": "xCITY Frontend",
+      "type": "frontend",
+      "status": "online",
+      "path": "/xcity",
+      "heartbeat": "/api/xcity/heartbeat",
+      "description": "Interfaccia urbana del sistema"
+    },
+    {
+      "id": "DSN-NODE",
+      "name": "DSN Node",
+      "type": "backend",
+      "status": "online",
+      "path": "/dsn",
+      "heartbeat": "/api/dsn/heartbeat",
+      "description": "Nodo di sincronizzazione stellare"
+    },
+    {
+      "id": "Z-AI_AOA",
+      "name": "Z‑AI Oracle",
+      "type": "ai",
+      "status": "online",
+      "path": "/ai",
+      "heartbeat": "/api/ai/heartbeat",
+      "description": "Oracolo cognitivo del sistema"
+    }
+  ]
+}

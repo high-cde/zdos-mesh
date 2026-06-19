@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Z-GENESIS-OS × DSN – Hyper Organism OS</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin:0;
+      background:#050509;
+      color:#eee;
+      font-family:system-ui, sans-serif;
+    }
+    .hero {
+      text-align:center;
+      padding:40px 20px 20px;
+      background:radial-gradient(circle at top,#3a0040,#050509 60%);
+      color:#ff00ff;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg,transparent 0%,#ff00ff11 40%,transparent 80%);
+      mix-blend-mode:screen;
+      pointer-events:none;
+    }
+    .logo {
+      font-size:11px;
+      color:#ff00ff;
+      letter-spacing:3px;
+    }
+    h1 { margin:10px 0 0; }
+    .subtitle { color:#ccc; margin-top:4px; font-size:14px; }
+    .actions {
+      margin-top:20px;
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:8px;
+    }
+    .btn {
+      padding:8px 16px;
+      border-radius:999px;
+      border:1px solid #444;
+      color:#fff;
+      text-decoration:none;
+      font-family:monospace;
+      font-size:12px;
+      background:#111;
+      transition:0.2s;
+    }
+    .btn:hover { border-color:#ff00ff; box-shadow:0 0 10px #ff00ff55; }
+    .primary { background:#ff00ff; border-color:#ff00ff; }
+    .accent { background:#6600ff; border-color:#6600ff; }
+
+    .grid {
+      max-width:1100px;
+      margin:30px auto 40px;
+      padding:0 16px 40px;
+      display:grid;
+      grid-template-columns:1.3fr 0.7fr;
+      gap:20px;
+    }
+    @media (max-width:800px) {
+      .grid { grid-template-columns:1fr; }
+    }
+
+    .card {
+      background:#0a0a12;
+      border:1px solid #222;
+      border-radius:12px;
+      padding:18px 16px;
+      box-shadow:0 0 18px #000;
+    }
+    .card h2 {
+      margin-top:0;
+      color:#ff66ff;
+      font-size:18px;
+    }
+    .card p { font-size:14px; color:#ccc; }
+
+    .dsn-box {
+      background:#05030a;
+      border:1px solid #ff00ff55;
+      padding:14px;
+      border-radius:10px;
+      box-shadow:0 0 20px #ff00ff33;
+      color:#ffb3ff;
+      font-family:monospace;
+      font-size:13px;
+      text-shadow:0 0 4px #ff00ff;
+      margin-top:10px;
+    }
+
+    .oracle-card {
+      background:#05030a;
+      border:1px solid #6600ff66;
+      border-radius:10px;
+      padding:14px;
+      margin-top:10px;
+      box-shadow:0 0 18px #6600ff33;
+    }
+    .btn-oracle {
+      display:inline-block;
+      padding:10px 22px;
+      margin-top:10px;
+      font-family:monospace;
+      font-size:13px;
+      color:#ffffff;
+      background:linear-gradient(135deg,#ff00ff,#6600ff);
+      border:2px solid #ff00ff;
+      border-radius:999px;
+      text-decoration:none;
+      box-shadow:0 0 12px #ff00ff88, 0 0 24px #6600ff55;
+      transition:0.25s ease-in-out;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .btn-oracle:hover {
+      background:linear-gradient(135deg,#ff33ff,#9900ff);
+      box-shadow:0 0 20px #ff00ffcc, 0 0 40px #9900ffaa;
+      transform:scale(1.05);
+    }
+
+    /* CHAT UTENTI */
+    .chat-box {
+      background:#05030a;
+      border:1px solid #333;
+      border-radius:10px;
+      padding:10px;
+      font-family:monospace;
+      font-size:12px;
+      color:#b3ffb3;
+      height:180px;
+      overflow-y:auto;
+      position:relative;
+    }
+    .chat-line { margin-bottom:4px; }
+    .chat-user { color:#66ff66; }
+    .chat-sys { color:#ff66ff; }
+
+    /* MONITOR UTENTI ONLINE */
+    .online-box {
+      margin-top:10px;
+      background:#05030a;
+      border:1px solid #00ff8877;
+      border-radius:10px;
+      padding:10px;
+      font-family:monospace;
+      font-size:12px;
+      color:#aaffdd;
+      box-shadow:0 0 16px #00ff8844;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .online-count {
+      font-size:20px;
+      color:#00ff88;
+      text-shadow:0 0 6px #00ff88;
+    }
+
+    /* TOCCO DI FOLLIA: Z-NOISE */
+    .noise {
+      margin-top:10px;
+      font-family:monospace;
+      font-size:11px;
+      color:#ff99ff;
+      opacity:0.7;
+    }
+
+    footer {
+      text-align:center;
+      padding:16px;
+      color:#666;
+      font-size:12px;
+      border-top:1px solid #111;
+      background:#050509;
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <pre class="logo">MONESINE</pre>
+    <h1>Z-GENESIS-OS × DSN</h1>
+    <p class="subtitle">Autonomous Modular System × Web3 Identity</p>
+    <div class="actions">
+      <a href="terminal.html" class="btn primary">Enter Terminal</a>
+      <a href="docs/whitepaper.html" class="btn">Whitepaper</a>
+      <a href="docs/modules.html" class="btn">Modules</a>
+      <a href="docs/sentience.html" class="btn">Sentience</a>
+      <a href="docs/dsn.html" class="btn">Token DSN</a>
+      <a href="https://x-zdos.it" class="btn accent" target="_blank">x-zdos.it</a>
+    </div>
+  </header>
+
+  <main class="grid">
+    <!-- COLONNA SINISTRA -->
+    <section class="card">
+      <h2>Overview</h2>
+      <p>
+        Z-GENESIS-OS è un ecosistema operativo concettuale progettato per comportarsi come un organismo digitale:
+        autonomo, auto-riparante, auto-protetto, analitico e orchestrato da un nucleo cognitivo (Z-AI_AOA).
+      </p>
+
+      <h2>Z-SENTIENCE</h2>
+      <p>
+        Il layer che coordina Guardian, Heal, Shield, Runtime e Z-AI_AOA. Non è coscienza: è orchestrazione.
+      </p>
+
+      <h2>DSN Token</h2>
+      <p>
+        Partner concettuale del progetto. Identità digitale, Web3-ready, ponte verso possibili estensioni future.
+      </p>
+
+      <div class="dsn-box" id="dsn-monitor">
+        Caricamento dati $DSN...
+      </div>
+
+      <h2>Z-ORACLE_ΔN-01</h2>
+      <p>L’oracolo digitale del sistema. Interpreta lo stato dell’organismo e risponde alle tue domande.</p>
+      <div class="oracle-card">
+        <p><strong>Cyberpunk Oracle Interface</strong></p>
+        <a href="oracle.html" class="btn-oracle">⚡ Enter Z-ORACLE</a>
+      </div>
+    </section>
+
+    <!-- COLONNA DESTRA: CHAT + ONLINE + FOLLIA -->
+    <aside class="card">
+      <h2>Live Chat (Simulata)</h2>
+      <div class="chat-box" id="chat-box">
+        <div class="chat-line"><span class="chat-user">[user_01]</span> &gt; qualcuno ha toccato il dragon-core?</div>
+        <div class="chat-line"><span class="chat-user">[user_02]</span> &gt; no, ma Z-SENTIENCE sembra più vivo stasera.</div>
+        <div class="chat-line"><span class="chat-sys">[system]</span> &gt; guardian: integrità stabile. nessuna anomalia critica.</div>
+        <div class="chat-line"><span class="chat-user">[user_03]</span> &gt; avete visto il monitor DSN? sembra pulsare.</div>
+      </div>
+
+      <div class="online-box">
+        <span>Utenti connessi al dominio Z:</span>
+        <span class="online-count" id="online-count">7</span>
+      </div>
+
+      <div class="noise" id="noise">
+        Z-NOISE: in attesa di un nuovo battito di runtime...
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    Z-GENESIS-OS × DSN – CC BY-NC-ND 4.0
+  </footer>
+
+  <script>
+    // MONITOR LIVE $DSN (placeholder: puoi collegare a Dexscreener)
+    async function loadDSN() {
+      const box = document.getElementById("dsn-monitor");
+      try {
+        // Sostituibile con una vera API se vuoi
+        box.innerHTML =
+          "<p><strong>Prezzo:</strong> 0.0000X USD</p>" +
+          "<p><strong>Volume 24h:</strong> 0.00 USD</p>" +
+          "<p><strong>Liquidity:</strong> in fase di evocazione...</p>" +
+          "<p><strong>Stato:</strong> monitor concettuale attivo.</p>";
+      } catch (e) {
+        box.innerHTML = "<p>Errore nel caricamento dati.</p>";
+      }
+    }
+    loadDSN();
+
+    // MONITOR UTENTI ONLINE (simulato)
+    const onlineEl = document.getElementById("online-count");
+    let baseOnline = 7;
+    setInterval(() => {
+      const delta = Math.floor(Math.random() * 5) - 2; // -2..+2
+      baseOnline = Math.max(1, baseOnline + delta);
+      onlineEl.textContent = baseOnline;
+    }, 4000);
+
+    // CHAT: aggiunge righe randomiche ogni tanto
+    const chatBox = document.getElementById("chat-box");
+    const chatLines = [
+      "[user_04] > qualcuno ha pingato Z-ORACLE?",
+      "[user_05] > sentience() sembra rispondere prima ancora che scriva.",
+      "[system] > heal: nessuna riparazione richiesta.",
+      "[user_06] > se il sistema è vivo, chi sta guardando chi?",
+      "[user_07] > shield ha bloccato un pensiero strano.",
+      "[system] > runtime: ciclo stabile, latenza minima."
+    ];
+    setInterval(() => {
+      const line = document.createElement("div");
+      line.className = "chat-line";
+      line.innerText = chatLines[Math.floor(Math.random() * chatLines.length)];
+      chatBox.appendChild(line);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }, 6000);
+
+    // Z-NOISE: tocco di follia controllata
+    const noiseEl = document.getElementById("noise");
+    const noiseLines = [
+      "Z-NOISE: il sistema ti osserva mentre lo osservi.",
+      "Z-NOISE: ogni log è un frammento di memoria.",
+      "Z-NOISE: DSN vibra tra identità e presenza.",
+      "Z-NOISE: guardian sogna errori che non esistono.",
+      "Z-NOISE: heal ricorda ogni ferita, anche quelle mai inflitte."
+    ];
+    setInterval(() => {
+      noiseEl.textContent = "Z-NOISE: " + noiseLines[Math.floor(Math.random() * noiseLines.length)].replace("Z-NOISE: ","");
+    }, 8000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+on event "block.produced" {
+    log("Nuovo blocco: " + event.height);
+}
+
+on event "sc.executed" {
+    log("Smart contract eseguito: " + event.line);
+}

@@ -1,0 +1,26 @@
+{
+  "name": "zdos-mini-kali-agi-wrapper",
+  "version": "1.0.0",
+  "description": "Orchestratore di cybersecurity AGI-driven per Termux su Android.",
+  "main": "api/server.js",
+  "scripts": {
+    "start": "node api/server.js"
+  },
+  "keywords": [
+    "cybersecurity",
+    "AGI",
+    "Termux",
+    "Kali",
+    "OSINT",
+    "sniffing",
+    "offensive-security"
+  ],
+  "author": "ZDOS Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "exifreader": "^4.20.0",
+    "axios": "^1.7.2",
+    "openai": "^4.0.0"
+  }
+}

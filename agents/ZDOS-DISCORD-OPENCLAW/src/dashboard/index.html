@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZDOS Hub Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0a0a0a; color: #00ff00; padding: 20px; }
+        .container { max-width: 800px; margin: auto; border: 1px solid #00ff00; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px #00ff00; }
+        h1 { text-align: center; border-bottom: 1px solid #00ff00; padding-bottom: 10px; }
+        .status-box { margin: 20px 0; padding: 15px; border: 1px dashed #00ff00; }
+        .btn { background: #00ff00; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #00cc00; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ZDOS ECOSYSTEM HUB</h1>
+        <div class="status-box" id="blockchain-status">
+            <h3>Stato Blockchain</h3>
+            <p>Caricamento...</p>
+        </div>
+        <div class="status-box">
+            <h3>Azioni Rapide</h3>
+            <button class="btn" onclick="checkStatus()">Aggiorna Stato</button>
+            <a href="https://github.com/high-cde/x-zdos-wallet" target="_blank"><button class="btn">Apri Wallet</button></a>
+        </div>
+    </div>
+
+    <script>
+        async function checkStatus() {
+            const statusDiv = document.getElementById('blockchain-status');
+            try {
+                // In un ambiente reale, questo punterebbe all'API dell'hub
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                statusDiv.innerHTML = `
+                    <h3>Stato Blockchain</h3>
+                    <p><strong>Rete:</strong> ${data.name}</p>
+                    <p><strong>Versione:</strong> ${data.version}</p>
+                    <p><strong>Chain ID:</strong> ${data.chain_id}</p>
+                `;
+            } catch (e) {
+                statusDiv.innerHTML = `<h3>Stato Blockchain</h3><p style="color:red;">Connessione all'API fallita.</p>`;
+            }
+        }
+        checkStatus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+// ===============================
+//  bridgechain.zmod - API ZDOS
+//  HighBridgeChain RPC Interface
+// ===============================
+
+// Wrapper generico per chiamare l'RPC del nodo
+fn rpc_call(method, params) {
+    let url = "http://127.0.0.1:8545";
+
+    let body = {
+        "jsonrpc": "2.0",
+        "method": method,
+        "params": params,
+        "id": 1
+    };
+
+    return http.post(url, body);
+}
+
+// ---------------------------------------
+//  SMART CONTRACT API
+// ---------------------------------------
+
+// Deploy di un contratto Z-Lang registrato nella VM
+fn deploy_contract(name, code) {
+    return rpc_call("vm_deploy", {
+        "contract": name,
+        "code": code
+    });
+}
+
+// Call di una funzione di un contratto
+fn call_contract(name, func, args) {
+    return rpc_call("vm_call", {
+        "contract": name,
+        "function": func,
+        "args": args
+    });
+}
+
+// Shortcut per il contratto "math"
+fn math_add(a, b) {
+    return call_contract("math", "add", {
+        "a": a,
+        "b": b
+    });
+}
+
+// ---------------------------------------
+//  Z-LANG EXECUTION ENGINE
+// ---------------------------------------
+
+// Esecuzione diretta di codice Z‑Lang tramite VM
+fn exec_zlang(code) {
+    return rpc_call("vm_exec_zlang", {
+        "code": code
+    });
+}
+
+// ---------------------------------------
+//  TEST / DEMO
+// ---------------------------------------
+
+fn test_all() {
+    log("Deploying math...");
+    deploy_contract("math", "math");
+
+    log("Calling math.add...");
+    let r = math_add(5, 7);
+    log("Result: " + r);
+
+    log("Executing Z-Lang expression...");
+    let z = exec_zlang("10 + 20");
+    log("Z-Lang => " + z);
+}

@@ -1,0 +1,13 @@
+ZONE Z-TRACE      "forensic trails"        "zones/z-trace.sh"
+ZONE Z-ARCHIVE    "snapshot vault"         "zones/z-archive.sh"
+ZONE Z-CLEAN      "structural hygiene"     "zones/z-clean.sh"
+ZONE Z-MIRROR     "replication layer"      "zones/z-mirror.sh"
+ZONE Z-LAB        "experimental zone"      "zones/z-lab.sh"
+ZONE Z-ICP        "Internet Computer"      "zones/z-icp-gateway.sh"
+
+RITUAL R-FULL-CLEAN   "deep hygiene"       "rituals/r-full-clean.sh"
+RITUAL R-DAILY-ARCH   "daily snapshot"     "rituals/r-daily-archive.sh"
+RITUAL R-ICP-HEALTH   "ICP healthcheck"    "rituals/r-icp-healthcheck.sh"
+RITUAL R-ICP-SCAN     "scan ICP core"      "rituals/r-icp-scan-core.sh"
+
+RITUAL R-SYSTEM-CYCLE  "full system orchestration"  "rituals/r-system-cycle.sh"

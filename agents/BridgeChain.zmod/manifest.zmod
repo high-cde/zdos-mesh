@@ -1,0 +1,8 @@
+name = "bridgechain"
+version = "0.1.0"
+type = "module"
+
+[entrypoints]
+rpc = "rpc_client.zlang"
+events = "events.zlang"
+api = "api.zlang"

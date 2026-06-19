@@ -1,0 +1,5 @@
+agent:
+  id: "zdos.x-zdos.it"
+  role: "tool"
+  capabilities:
+    - "echo"
