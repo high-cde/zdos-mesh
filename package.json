@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "ioredis": "^5.11.1",
+    "js-yaml": "^4.2.0"
+  }
+}
